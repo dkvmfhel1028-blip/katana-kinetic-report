@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>영상 생성 없이 만든 카타나 키네틱 영상</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">작업과정 리포트 · 2026-10-24</div>
+    <h1>영상 생성 0번으로<br>18초 키네틱 영상 만들기</h1>
+    <p>힉스필드 카타나 프리셋 영상을 레퍼런스로 삼아, 정지 그림 18장과 HTML 코드 한 장만으로 같은 구성의 영상을 만든 과정을 단계별로 정리했습니다.</p>
+    <div class="meta-line">레퍼런스: <a href="https://higgsfield.ai/s/ps48d8f792352c4d76b27199eb19ecfba6">Kinetic Graphic Photo Edit (힉스필드 카타나)</a></div>
+  </header>
+
+  <section>
+    <h2>먼저 결론</h2>
+    <p class="lead">영상을 AI로 생성하지 않고, 사진은 그림으로 만들고 움직임은 코드가 한 프레임씩 그려서 영상으로 묶었습니다.</p>
+    <div class="verdict">
+      <div class="card"><span class="badge good">그림</span><h3>사진은 ChatGPT로 18장</h3><p>인물 5명, 소품 5개, 배경 3장을 에고 브라우저의 ChatGPT로 그렸습니다. 힉스필드 이미지·영상 생성은 한 번도 쓰지 않았습니다.</p></div>
+      <div class="card"><span class="badge good">움직임</span><h3>코드가 432프레임을 그림</h3><p>장면 19개를 HTML 한 장에 짜고, 힉스필드 작업 공간의 크롬이 프레임마다 화면을 찍어 영상으로 붙였습니다. 렌더는 88초 걸렸습니다.</p></div>
+      <div class="card"><span class="badge warn">한계</span><h3>사람이 직접 움직이진 않음</h3><p>인물은 사진이라 몸짓이 없고, 화면과 글자만 움직입니다. 음악은 레퍼런스 원곡이라 공개하려면 곡을 바꿔야 합니다.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>1. 숫자로 본 작업</h2>
+    <p class="lead">든 비용은 힉스필드 크레딧 0이고, 사람 손이 간 일은 확인과 수정뿐이었습니다.</p>
+    <div class="stats">
+      <div class="card stat"><div class="num">18.02초</div><div class="label">영상 길이 (432프레임)</div></div>
+      <div class="card stat"><div class="num">18장</div><div class="label">ChatGPT 그림 에셋</div></div>
+      <div class="card stat"><div class="num">19개</div><div class="label">코드로 짠 장면</div></div>
+      <div class="card stat"><div class="num">88초</div><div class="label">전체 렌더 시간</div></div>
+      <div class="card stat"><div class="num">0</div><div class="label">쓴 크레딧 (10 그대로)</div></div>
+    </div>
+    <div class="formula"><b>영상 생성 0</b> = 사진은 <b>ChatGPT 그림</b> + 움직임은 <b>HTML 코드</b> + 소리는 <b>레퍼런스 원곡</b></div>
+    <div class="two-col">
+      <div class="card"><h3>읽을 점</h3><ul class="clean">
+        <li><b>크레딧</b>: 작업 전후 잔액 10, 거래 내역 0건으로 확인했습니다.</li>
+        <li><b>그림 시간</b>: 한 장 중앙값 40초, 스페이스 3개로 동시에 돌려 약 18분 걸렸습니다.</li>
+        <li><b>코드 양</b>: 페이지 한 장 401줄. 장면마다 시작·끝 시간과 움직임 함수가 들어 있습니다.</li>
+        <li><b>결과 파일</b>: 1920×1080, 23.976fps, 8.7MB.</li>
+      </ul></div>
+      <div class="card"><h3>쓴 도구</h3><ul class="clean">
+        <li><b>ChatGPT (에고 브라우저)</b>: 인물·소품·배경 그림</li>
+        <li><b>파이썬</b>: 초록 배경 빼기, 프레임 시트, 비교 이미지</li>
+        <li><b>힉스필드 작업 공간</b>: 카타나가 쓰는 원격 리눅스. 크롬·ffmpeg가 있고 쓰는 데 크레딧이 들지 않습니다.</li>
+        <li><b>page_render.py</b>: 카타나에 들어 있는 HTML 렌더 도구</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>2. 전체 흐름</h2>
+    <p class="lead">레퍼런스를 0.125초 단위로 뜯어 본 다음, 장면마다 그림과 코드를 맞춰 넣는 6단계였습니다.</p>
+    <div class="flow">
+      <div class="card step"><div class="no">1단계</div><div class="t">레퍼런스 해부</div><div class="d">공유 링크가 카타나 프리셋으로 연결됨을 확인하고, 원본 영상을 받아 초당 8장씩 144장을 봤습니다.</div></div>
+      <div class="card step"><div class="no">2단계</div><div class="t">그림 에셋 18장</div><div class="d">장면 사진을 먼저 그리고, 그 사진을 첨부해 같은 사람의 초록 배경 컷을 그렸습니다.</div></div>
+      <div class="card step"><div class="no">3단계</div><div class="t">배경 빼기</div><div class="d">초록 배경을 투명하게 뺐습니다. 경계에서만 초록 번짐을 지워 옷 색을 살렸습니다.</div></div>
+      <div class="card step"><div class="no">4단계</div><div class="t">추가 지침</div><div class="d">장면 19개의 시간·배치·새 문구를 카타나 입력칸용 영어 1,971자로 적었습니다.</div></div>
+      <div class="card step"><div class="no">5단계</div><div class="t">HTML로 편집</div><div class="d">지침을 그대로 코드로 옮겼습니다. 시간 t를 받으면 그 순간 화면을 그리는 함수입니다.</div></div>
+      <div class="card step"><div class="no">6단계</div><div class="t">렌더·검수·저장</div><div class="d">정지 화면 26장으로 먼저 보고 크기를 고친 뒤 전체 렌더, 레퍼런스와 같은 시점끼리 비교했습니다.</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>3. 레퍼런스 해부</h2>
+    <p class="lead">18초 중 실제 그림은 1.25초부터 14.9초까지이고, 그 사이에 장면 19개가 평균 0.72초씩 지나갑니다.</p>
+    <div class="card chart-card" data-chart>
+      <p class="chart-title">장면별 길이 (초)</p>
+      <p class="chart-sub">막대 위에 마우스를 올리면 시작 시점과 내용이 보입니다.</p>
+      <div class="chart"><div class="tooltip"></div></div>
+      <details class="table-view"><summary>표로 보기</summary><table></table></details>
+      <script type="application/json" class="chart-data">
+        { "type": "bar", "label": "scene", "value": "sec", "unit": "초",
+          "labelAt": ["검정", "01", "벽돌", "끝"],
+          "tooltip": ["start:시작:초"], "columns": ["장면", "길이", "시작"],
+          "rows": [
+            { "scene": "검정", "sec": 1.25, "start": 0 },
+            { "scene": "글자", "sec": 0.75, "start": 1.25 },
+            { "scene": "Day", "sec": 0.875, "start": 2.0 },
+            { "scene": "지면", "sec": 0.875, "start": 2.875 },
+            { "scene": "말풍선", "sec": 0.875, "start": 3.75 },
+            { "scene": "큐브", "sec": 0.75, "start": 4.625 },
+            { "scene": "지구본", "sec": 0.875, "start": 5.375 },
+            { "scene": "레코드", "sec": 0.875, "start": 6.25 },
+            { "scene": "Spin", "sec": 0.875, "start": 7.125 },
+            { "scene": "01", "sec": 0.5, "start": 8.0 },
+            { "scene": "02", "sec": 0.375, "start": 8.5 },
+            { "scene": "03", "sec": 0.5, "start": 8.875 },
+            { "scene": "04", "sec": 0.375, "start": 9.375 },
+            { "scene": "SUN", "sec": 1.0, "start": 9.75 },
+            { "scene": "벽돌", "sec": 1.125, "start": 10.75 },
+            { "scene": "MONEY", "sec": 0.875, "start": 11.875 },
+            { "scene": "카드", "sec": 0.25, "start": 12.75 },
+            { "scene": "달력", "sec": 1.0, "start": 13.0 },
+            { "scene": "CLUB", "sec": 0.875, "start": 14.0 },
+            { "scene": "끝", "sec": 3.143, "start": 14.875 }
+          ] }
+      </script>
+    </div>
+    <div class="two-col">
+      <div class="card"><h3>본 것</h3><ul class="clean">
+        <li><b>컷 박자</b>: 대부분 0.875초. 숫자 패널 01~04만 0.375~0.5초로 빨라집니다.</li>
+        <li><b>소리</b>: 음악이 0초부터 깔리고 화면은 1.25초에 시작, 14.9초에 끝나 3초 동안 검은 화면에 음악만 나옵니다.</li>
+        <li><b>룩</b>: 플래시 디카 사진 + 좁고 굵은 글자 + 크롬 3D 한자 + 알약 라벨 + 얇은 선 박스.</li>
+        <li><b>전환</b>: 컷마다 모션 블러, 휙 줌, 짧은 흔들림.</li>
+      </ul></div>
+      <div class="card"><h3>바꾼 것</h3><ul class="clean">
+        <li><b>글자</b>: 화면 글자가 실제 노래 가사라 옮기지 않고, 같은 길이의 새 문구로 바꿨습니다(Look closer, Day dream, SUNSHINE 등).</li>
+        <li><b>말풍선</b>: 마약을 말하던 문구를 "where r u", "pink cafe"로 바꿨습니다.</li>
+        <li><b>인물</b>: 레퍼런스의 실제 인물 대신 새로 그린 가상 인물 5명을 넣었습니다.</li>
+      </ul></div>
+    </div>
+    <figure class="card sheet"><img src="img/ref_sheet.jpg" alt="레퍼런스 6초부터 9초까지 0.125초 간격 프레임"><figcaption>레퍼런스 6.0~8.9초, 0.125초 간격 24장. 레코드판, 사진 카드, 숫자 패널 01~03이 지나가는 구간입니다.</figcaption></figure>
+  </section>
+
+  <section>
+    <h2>4. 그림 에셋 18장</h2>
+    <p class="lead">영상 대신 정지 사진만 필요했기 때문에, ChatGPT로 장면 사진과 오려낼 컷을 따로 만들었습니다.</p>
+    <figure class="card"><img src="img/assets.jpg" alt="인물 장면사진, 투명컷, 소품, 배경 모아보기"><figcaption>위부터 인물 장면사진 5장, 같은 사람의 투명컷 5장, 소품 5개, 배경 3장.</figcaption></figure>
+    <div class="card"><h3>얼굴을 맞춘 방법</h3><ul class="clean">
+        <li><b>순서</b>: 장면 사진(C1_S)을 먼저 그리고, 그 사진을 ChatGPT에 첨부해 초록 배경 컷(C1_K)을 그렸습니다.</li>
+        <li><b>문구</b>: "첨부한 사람과 같은 얼굴·머리·피부·옷"을 프롬프트 맨 앞에 넣었습니다.</li>
+        <li><b>룩 통일</b>: 모든 사진에 "2000년대 초 디카, 정면 플래시, 약한 노이즈"를 같은 문장으로 붙였습니다.</li>
+      </ul></div>
+    <div class="card chart-card" data-chart>
+        <p class="chart-title">그림 한 장에 걸린 시간 (초)</p>
+        <div class="chart"><div class="tooltip"></div></div>
+        <script type="application/json" class="chart-data">
+          { "type": "hbar", "label": "id", "value": "sec", "unit": "초",
+            "rows": [
+              { "id": "인물5 투명컷", "sec": 665 }, { "id": "벽돌 벽", "sec": 661 },
+              { "id": "인물2 장면", "sec": 62 }, { "id": "인물5 장면", "sec": 56 },
+              { "id": "인물1 투명컷", "sec": 55 }, { "id": "레코드판", "sec": 53 },
+              { "id": "날리는 지폐", "sec": 52 }, { "id": "인물3 투명컷", "sec": 42 },
+              { "id": "인물4 장면", "sec": 41 }, { "id": "인물3 장면", "sec": 40 },
+              { "id": "인물1 장면", "sec": 38 }, { "id": "도시 창 (다시)", "sec": 37 },
+              { "id": "종이비행기", "sec": 35 }, { "id": "인물4 투명컷", "sec": 34 },
+              { "id": "인물2 투명컷", "sec": 33 }, { "id": "도시 창 (처음)", "sec": 33 },
+              { "id": "다이얼 전화", "sec": 32 }, { "id": "핑크 카페", "sec": 32 },
+              { "id": "노란 별", "sec": 29 }
+            ] }
+        </script>
+        <p class="note">두 장만 11분 걸렸습니다. ChatGPT가 오래 붙잡고 있던 경우로 보이고(추정), 나머지는 29~62초였습니다.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>5. 막혔던 곳과 고친 방법</h2>
+    <p class="lead">다섯 번 막혔고, 모두 원인을 찾아 다시 했습니다. 다음 작업에 그대로 쓸 수 있게 남깁니다.</p>
+    <div class="card table-scroll">
+      <table>
+        <thead><tr><th>문제</th><th>원인</th><th>고친 방법</th></tr></thead>
+        <tbody>
+          <tr><td>그림 9장 실패</td><td>다른 세션이 끝나면서 "쇼츠랩" 이름의 에고 스페이스를 한꺼번에 닫음</td><td class="diff-hi">스페이스 이름을 "키네틱 그림"으로 바꿔 다시 그림</td></tr>
+          <tr><td>도시 배경이 콜라주</td><td>ChatGPT가 앞 대화 그림까지 섞어 세 칸으로 그림</td><td class="diff-hi">"한 장으로 이어진 사진, 콜라주 아님" 문구를 넣어 다시 그림</td></tr>
+          <tr><td>배경 뺄 때 옷 색이 빠짐</td><td>초록 번짐 제거를 그림 전체에 걸어 민트 옷·노란 별·지폐까지 회색이 됨</td><td class="diff-hi">투명한 곳에서 6픽셀 안쪽 경계에서만 지우는 스크립트로 바꿈</td></tr>
+          <tr><td>글자·카드가 작음</td><td>첫 정지 화면을 레퍼런스와 재 보니 말풍선·달력·MONEY가 절반 크기</td><td class="diff-hi">레퍼런스 크기를 재서 30여 곳의 숫자를 고침</td></tr>
+          <tr><td>GIRLS 글자 간격</td><td>글자 위치를 손으로 정해 G I R L S 간격이 들쭉날쭉</td><td class="diff-hi">한 줄로 묶고 글자마다 떨어지는 움직임만 따로 줌</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="figure-grid">
+      <figure class="card"><div class="tag-row"><span class="tag theirs">고치기 전</span><span class="tag ours">고친 뒤</span></div><img src="img/cutout_fix.jpg" alt="배경 빼기 전후 비교"><figcaption>위가 처음 방식, 아래가 고친 방식(3번 인물, 노란 별, 지폐). 민트 상의와 별, 지폐 색이 돌아왔습니다.</figcaption></figure>
+      <figure class="card"><div class="tag-row"><span class="tag theirs">처음</span><span class="tag ours">다시</span></div><img src="img/b3_fix.jpg" alt="콜라주로 나온 배경과 다시 그린 배경"><figcaption>왼쪽이 세 장이 섞인 콜라주, 오른쪽이 다시 그린 한 장짜리 도시 창밖.</figcaption></figure>
+    </div>
+    <figure class="card"><div class="tag-row"><span class="tag theirs">1차 정지 화면</span><span class="tag ours">크기 수정 후</span></div><img src="img/size_fix.jpg" alt="크기 수정 전후 정지 화면"><figcaption>위가 1차, 아래가 수정 후(4.0초 말풍선, 13.5초 달력). 레퍼런스 크기에 맞췄습니다.</figcaption></figure>
+  </section>
+
+  <section>
+    <h2>6. 코드로 영상을 만든 원리</h2>
+    <p class="lead">영상 파일을 만드는 게 아니라, "t초일 때 화면이 어떻게 생겼나"를 계산하는 웹페이지를 만들고 그걸 432번 찍었습니다.</p>
+    <div class="flow">
+      <div class="card step"><div class="no">페이지</div><div class="t">무대 1024×576</div><div class="d">레퍼런스와 같은 크기로 배치하고 1.875배로 키워 1080p로 찍습니다.</div></div>
+      <div class="card step"><div class="no">장면</div><div class="t">시작·끝 시간</div><div class="d">장면 19개가 각자 시간대를 갖고, 그 시간에만 보입니다.</div></div>
+      <div class="card step"><div class="no">움직임</div><div class="t">시간 → 위치</div><div class="d">위치·크기·회전·흐림을 시간의 함수로 계산합니다. 무작위 대신 고정된 수식이라 몇 번을 찍어도 같은 화면이 나옵니다.</div></div>
+      <div class="card step"><div class="no">효과</div><div class="t">흔들림·번쩍임</div><div class="d">컷 시점 19곳에서 흔들림, 5곳에서 흰 번쩍임, 장면 시작마다 0.1초 휙 줌을 겁니다.</div></div>
+      <div class="card step"><div class="no">렌더</div><div class="t">크롬이 찍고 붙임</div><div class="d">크롬이 432프레임을 49초에 찍고, ffmpeg가 30초에 영상으로 붙인 뒤 원곡을 얹습니다.</div></div>
+    </div>
+    <div class="two-col">
+      <div class="card"><h3>그림 없이 코드로만 그린 것</h3><ul class="clean">
+        <li><b>3D 글자</b>: 夢, ON MY MIND, TIME 같은 글자는 같은 글자를 6~10겹 어긋나게 겹쳐 두께를 냈습니다.</li>
+        <li><b>3D 큐브</b>: 웹의 3D 회전으로 면 4개를 붙여 돌렸습니다.</li>
+        <li><b>철망 지구본·점선 길·네온 낙서</b>: 선 그림(SVG)으로 그리고 선이 그려지는 속도를 시간에 묶었습니다.</li>
+        <li><b>말풍선·달력 아이콘·바코드·숫자 패널</b>: 모두 글자와 상자로 만들었습니다.</li>
+      </ul></div>
+      <div class="card"><h3>그림을 쓴 것</h3><ul class="clean">
+        <li><b>인물 사진</b>: 장면 사진은 배경째, 투명컷은 숫자 패널에 올렸습니다.</li>
+        <li><b>소품</b>: 레코드판, 노란 별, 지폐, 종이비행기, 다이얼 전화.</li>
+        <li><b>배경</b>: 벽돌 벽 위에 조명과 가장자리 어둡게를 코드로 덧칠했습니다.</li>
+        <li><b>부채꼴 사진 조각</b>: 사진 한 장을 다섯 조각 모양으로 잘라 펼쳤습니다.</li>
+      </ul></div>
+    </div>
+    <figure class="card sheet"><img src="img/stills_v2.jpg" alt="렌더 전 정지 화면 26장"><figcaption>전체 렌더 전에 뽑아 본 정지 화면 26장. 이 단계에서 크기와 위치를 고쳤습니다.</figcaption></figure>
+  </section>
+
+  <section>
+    <h2>7. 레퍼런스와 결과 비교</h2>
+    <p class="lead">같은 시점 12곳을 나란히 놓으면 장면 순서, 배치, 컷 박자가 거의 그대로입니다.</p>
+    <figure class="card"><div class="tag-row"><span class="tag theirs">레퍼런스 (위 줄)</span><span class="tag ours">우리 영상 (아래 줄)</span></div><img src="img/compare.jpg" alt="레퍼런스와 결과 같은 시점 비교"><figcaption>1.8초부터 12.5초까지 12곳. 1·3번째 줄이 레퍼런스, 2·4번째 줄이 우리 영상입니다.</figcaption></figure>
+    <div class="card table-scroll">
+      <table>
+        <thead><tr><th>항목</th><th class="col-theirs">레퍼런스</th><th class="col-ours">우리 영상</th></tr></thead>
+        <tbody>
+          <tr><td>길이·화면</td><td class="col-theirs">18.02초, 1024×576</td><td class="col-ours">18.02초, 1920×1080</td></tr>
+          <tr><td>컷 시점</td><td class="col-theirs">장면 19개</td><td class="col-ours">같은 시점 19개</td></tr>
+          <tr><td>인물</td><td class="col-theirs">실제 인물 여러 명, 일부 영상</td><td class="col-ours diff-hi">가상 인물 5명, 전부 정지 사진</td></tr>
+          <tr><td>글자</td><td class="col-theirs">노래 가사</td><td class="col-ours diff-hi">같은 길이의 새 문구</td></tr>
+          <tr><td>3D 글자</td><td class="col-theirs">두께 있는 진짜 3D</td><td class="col-ours">겹친 그림자로 낸 두께라 조금 얇음</td></tr>
+          <tr><td>음악</td><td class="col-theirs">원곡</td><td class="col-ours">원곡 그대로 (공개 전 교체 필요)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <figure class="card sheet"><img src="img/final_sheet.jpg" alt="결과 영상 0.5초 간격 프레임"><figcaption>결과 영상 0~14.5초, 0.5초 간격 30장.</figcaption></figure>
+  </section>
+
+  <section>
+    <h2>8. 다음에 다시 쓰려면</h2>
+    <div class="two-col">
+      <div class="card"><h3>그대로 쓰면 되는 것</h3><ul class="clean">
+        <li><b>그림</b>: gpt_image.sh 복사본(가로·세로·정사각 비율 지정, 인물 첨부 문구)과 prompts.json 형식.</li>
+        <li><b>배경 빼기</b>: scripts/cutout.py. 초록 배경 #00B140으로 그리면 바로 투명 PNG가 나옵니다.</li>
+        <li><b>편집 틀</b>: katana/index.html. 장면 함수만 바꾸면 다른 레퍼런스에도 씁니다.</li>
+        <li><b>다시 렌더</b>: km_assets.zip과 index.html을 작업 공간에 올리고 page_render.py render 한 줄.</li>
+      </ul></div>
+      <div class="card"><h3>조심할 것</h3><ul class="clean">
+        <li><b>세션 1시간</b>: 카타나 실행 세션은 만든 지 1시간 뒤 닫히니 시작하면 바로 끝까지 갑니다.</li>
+        <li><b>스페이스 이름</b>: 작업마다 다른 이름을 써야 다른 세션이 닫지 않습니다.</li>
+        <li><b>가사·음악</b>: 레퍼런스가 노래면 화면 글자는 새로 쓰고, 공개용은 곡도 바꿉니다.</li>
+        <li><b>사람 몸짓</b>: 진짜 움직임이 필요하면 그 장면만 Grok 6초 클립을 넣는 방식이 있습니다(크레딧 아님, 이번엔 안 씀).</li>
+      </ul></div>
+    </div>
+    <div class="card"><h3>파일 위치</h3><ul class="clean">
+      <li><b>지침</b>: 카타나_키네틱그래픽/추가지침_Instructions.md</li>
+      <li><b>에셋</b>: 카타나_키네틱그래픽/에셋/ (입력용 5장, 투명컷, 소품, 배경)</li>
+      <li><b>코드</b>: 카타나_키네틱그래픽/katana/index.html</li>
+      <li><b>기록</b>: 카타나_키네틱그래픽/작업기록.md</li>
+    </ul></div>
+  </section>
+
+  <footer>자료: 2026-10-24 작업 로그(logs_wave1~3.txt, 렌더 로그), 힉스필드 잔액·거래 내역 조회, 레퍼런스 원본 프레임. 그림 시간 11분 두 건의 원인은 추정입니다.</footer>
+</main>
+<script src="chart.js"></script>
+</body>
+</html>
